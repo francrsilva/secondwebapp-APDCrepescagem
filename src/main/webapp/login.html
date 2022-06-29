@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="content-type"
+	content="application/xhtml+xml; charset=UTF-8" />
+<title>Login</title>
+<script type="text/javascript" src="/app.js"></script>
+</head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+
+
+input[type=text], input[type=password] {
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+	
+}
+
+.button {
+	background-color: #3675f4;
+	color: white;
+	padding: 14px 20px;
+	margin: 8px 0;
+	border: none;
+	cursor: pointer;
+}
+
+.button:hover {
+	opacity: 0.8;
+}
+
+
+.container {
+	padding: 10px;
+}
+
+
+</style>
+
+
+
+<body onload= "loginStart()">
+	<h2>Login</h2>
+	
+	<nav >
+			<a href="/index.html" class="w3-button w3-bar-item">Home</a> 
+		</nav>
+	
+	<form>		
+		<div class="container">
+			<label for="username"><b>Username:</b></label> <input type="text"
+				name= "username" id="username" placeholder="Enter Username" required><br> <label
+				for="pwd"><b>Password:</b></label> <input type="password" name="password"
+				id="password" placeholder="Enter Password" required><br>
+
+			<input class="button" type="submit" value="Login" />
+			<p>
+				Don't have an account? <a href="/register.html">Create new account</a>.
+			</p>
+
+		</div>
+		
+		
+	</form>
+	
+	
+	
+			
+
+
+</body>
+</html>

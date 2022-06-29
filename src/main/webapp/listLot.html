@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="content-type"
+	content="application/xhtml+xml; charset=UTF-8" />
+<title>List Lot</title>
+<script type="text/javascript" src="/app.js"></script>
+</head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+
+input[type=text], input[type=password], input[type=number] {
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+	
+}
+
+.button {
+	background-color: #3675f4;
+	color: white;
+	padding: 14px 20px;
+	margin: 8px 0;
+	border: none;
+	cursor: pointer;
+}
+
+.button:hover {
+	opacity: 0.8;
+}
+
+
+.container {
+	padding: 10px;
+}
+
+
+</style>
+
+
+
+<body >
+	<h2>Search by latitude</h2>
+	
+	<nav >
+			<a href="/home.html" class="w3-button w3-bar-item">Home</a> 
+		</nav>
+	
+		<form onload= "getListLotLat()">		
+			<div class="container">
+				<label for="upRightLat"><b>upRightLat:</b></label> <input type="number"
+					name= "upRightLat" id="upRightLat" placeholder="Enter upRight latitude" required><br> <label
+					for="downLeftLat"><b>downLeftLat:</b></label> <input type="number" name="downLeftLat"
+					id="downLeftLat" placeholder="Enter downLeft Latitude" required><br>
+	
+				<input class="button" type="submit" value="Lat" />
+				
+	
+			</div>
+			
+			
+		</form>
+		
+		<h2>Search by longitude</h2>
+	
+		<form onload= "getListLotLong()">		
+			<div class="container">
+				<label for="upRightLong"><b>upRightLong:</b></label> <input type="number"
+					name= "upRightLong" id="upRightLong" placeholder="Enter upRight longitude" required><br> <label
+					for="downLeftLong"><b>downLeftLong:</b></label> <input type="number" name="downLeftLong"
+					id="downLeftLong" placeholder="Enter downLeft longitude" required><br>
+	
+				<input class="button" type="submit" value="Long" />
+				
+	
+			</div>
+			
+			
+		</form>
+	
+	
+			
+
+
+</body>
+</html>

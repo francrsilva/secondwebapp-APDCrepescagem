@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="content-type"
+	content="application/xhtml+xml; charset=UTF-8" />
+<title>Register Lot</title>
+<script type="text/javascript" src="/app.js"></script>
+
+
+
+<style>
+
+* {
+	box-sizing: border-box;
+}
+
+/* Add padding to containers */
+.container {
+	padding: 17px;
+	background-color: white;
+}
+
+/* Full-width input fields */
+input[type=text], input[type=password], input[type=number] {
+	padding: 16px;
+	margin: 6px 0 23px 0;
+	display: inline-block;
+	border: none;
+	background: #f1f1f1;
+}
+
+input[type=text]:focus, input[type=password]:focus, input[type=number]:focus{
+	background-color: #ddd;
+	outline: none;
+}
+
+/* Overwrite default styles of hr */
+hr {
+	border: 1px solid #f1f1f1;
+	margin-bottom: 20px
+}
+
+/* Set a style for the submit button */
+.registerbutton {
+	background-color: #3675f4;
+	color: white;
+	padding: 16px 20px;
+	margin: 8px 0;
+	border: none;
+	cursor: pointer;
+	opacity: 0.9;
+	margin-left:10 px;
+}
+
+.registerbutton:hover {
+	opacity: 1;
+}
+
+/* Add a blue text color to links */
+a {
+	color: dodgerblue;
+}
+
+
+.list{
+margin-left:10px;
+}
+</style>
+</head>
+
+<body onload= "registerLotStart()">
+
+	<form>
+		<div class="container">
+			<h1>Register Lot</h1>
+			<nav>
+			<a href="/index.html">Home</a>
+			</nav>
+			<hr>
+
+			<label for="idLot"><b>idLot</b></label> <input type="text"
+				placeholder="Enter Lot id" name="idLot" id="idLot" required>
+			<br>
+			<label for="rustico "><b>Tipo de terreno</b></label><select class="list"
+				id="rustico" name="rustico">
+				<option value=true>Rustico</option>
+				<option value=false>Não Rustico</option>
+				</select>
+			<br>
+			<label for="nameOwner"><b>Nome do Proprietario</b></label> <input type="text"
+				placeholder="Enter name owner" name="nameOwner" id="nameOwner" required><br>
+				<label
+				for="nacionalidade"><b>Nacionalidade</b></label> <input
+				type="text" placeholder="Enter nacionality" name="nacionalidade"
+				id="nacionalidade" required><br>
+				<label for="tipoDoc "><b>Tipo de documento</b></label><select class="list"
+				id="tipoDoc" name="tipoDoc">
+				<option value="CC">cartão de cidadão</option>
+				<option value="passaporte">passaporte</option>
+				
+				</select> 
+				<br>
+				<label for="dataDoc"><b>Validade documento</b></label> <input type="text"
+				placeholder="Enter expire data of document" name="dataDoc" id="dataDoc" required>
+				<br>
+				<label for="upRightLat"><b>latitude de upRight</b></label> <input
+				type="number" placeholder="Enter up right coordinate latitude " name="upRightLat" id="upRightLat"><br>
+				<label for="upRightLong"><b>longitude de upRight</b></label> <input
+				type="number" placeholder="Enter up right coordinate longitude " name="upRightLong" id="upRightLong"><br>
+				
+				<label for="downLeftLat"><b>latitude de downLeft</b></label> <input
+				type="number" placeholder="Enter down left coordinate latitude " name="downLeftLat" id="downLeftLat"><br>
+				<label for="downLeftLong"><b>longitude de downLeft</b></label> <input
+				type="number" placeholder="Enter down left coordinate longitude " name="downLeftLong" id="downLeftLong"><br>
+				
+				
+			<hr>
+			<input class="registerLotbutton" type="submit" value="RegisterLot" />
+
+			
+		</div>
+
+	
+	</form>
+
+
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="content-type"
+	content="application/xhtml+xml; charset=UTF-8" />
+<script type="text/javascript" src="/app.js"></script>
+
+<title> Welcome</title>
+
+<style>
+
+.topnav {
+	overflow: hidden;
+	background-color: #333;
+}
+
+.topnav a {
+	float: left;
+	color: #f2f2f2;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	font-size: 17px;
+}
+
+.topnav a:hover {
+	background-color: #ddd;
+	color: black;
+}
+
+.topnav a.active {
+	background-color: #3675f4;
+	color: white;
+}
+
+.logoutButton{
+	position:fixed;
+	right:10px;
+	background-color: rgb(255, 0, 0);
+	color: white;
+	padding: 14px 20px;
+	margin: 5px 0;
+	border: none;
+	cursor: pointer;
+
+}
+
+.logoutButton:hover {
+	opacity: 0.6;
+}
+
+</style>
+</head>
+
+<body onload="getHomeData()">
+	
+
+
+	<div class="topnav">
+		<a class="active" href="#home">Home</a> 
+		<a href="/update.html">Update</a> 
+		<a href="/updateRole.html">Update Role</a> 
+		<a href="/updateStatus.html">Update Status</a> 
+		<a href="/remove.html">Remove</a>
+		<a href="/newPwd.html">New Password</a>
+		<a href="/registerLot.html">Register Lot</a>
+		<a onclick="getList()">List</a>
+		<a href="/listLot.html">List Lot</a>		
+		<a onclick="getToken()" >Token</a>
+		
+		<input id="logoutStartButton" type="button" class="logoutButton" value="logout" onclick="logoutStart()" >
+		
+	</div>
+	
+	
+		
+		
+<div style="padding-left:16px">
+<h1 style="padding-left:16px" id="welcomeMessage"></h1>
+	<div style="padding-left:16px"  id="role"></div>
+</div>
+
+	
+</body>
+</html>

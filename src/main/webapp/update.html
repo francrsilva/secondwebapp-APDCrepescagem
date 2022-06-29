@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="content-type"
+	content="application/xhtml+xml; charset=UTF-8" />
+<title>Update</title>
+<script type="text/javascript" src="/app.js"></script>
+
+
+
+<style>
+
+* {
+	box-sizing: border-box;
+}
+
+/* Add padding to containers */
+.container {
+	padding: 16px;
+	background-color: white;
+}
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+	padding: 15px;
+	margin: 5px 0 22px 0;
+	display: inline-block;
+	border: none;
+	background: #f1f1f1;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+	background-color: #ddd;
+	outline: none;
+}
+
+/* Overwrite default styles of hr */
+hr {
+	border: 1px solid #f1f1f1;
+	margin-bottom: 20px
+}
+
+/* Set a style for the submit button */
+.updatebutton {
+	background-color: #3675f4;
+	color: white;
+	padding: 16px 20px;
+	margin: 8px 0;
+	border: none;
+	cursor: pointer;
+	opacity: 0.9;
+	margin-left:10 px;
+}
+
+.updatebutton:hover {
+	opacity: 1;
+}
+
+/* Add a blue text color to links */
+a {
+	color: dodgerblue;
+}
+
+
+.list{
+margin-left:10px;
+}
+</style>
+</head>
+
+<body onload= "updateStart()">
+
+	<form>
+		<div class="container">
+			<h1>Update</h1>
+			<nav>
+			<a href="/home.html">Home</a>
+			</nav>
+			<br>
+			<label>User info to update:</label>
+			
+			<hr>
+			<label for="username"><b>Username:</b></label> <input type="text"
+				placeholder="Enter Username" name="username" id="username" required>
+			<br>
+			<label for="email"><b>Email:</b></label> <input type="text"
+				placeholder="Enter Email" name="email" id="email" required>
+			<br>
+			 <label for="name"><b>Name:</b></label><input
+				type="text" placeholder="Enter Name" name="name" id="name" required> 
+				<br><label for="perfill "><b>Perfil:</b></label><select class="list"
+				id="perfil" name="perfil">
+				<option value="UNDEFINED">UNDEFINED</option>
+				<option value="Público">Público</option>
+				<option value="Privado">Privado</option>
+
+			</select><br> <label for="tel_fixo"><b>Telefone fixo:</b></label> <input
+				type="text" placeholder="Enter " name="tel_fixo" id="tel_fixo"><br> 
+			<label for="telmv"><b>Telemóvel:</b></label> <input
+			 type="text" placeholder="Enter mobile number" name="telmv" id="telmv">
+<br>
+			<label for="nif"><b>NIF:</b></label> <input type="text"
+				placeholder="Enter NIF" name="nif" id="nif">
+									<br>
+					<label for="address1"><b>Rua</b></label> <input type="text"
+			placeholder="Enter Street" name="address1" id="address1">
+			<label for="address2"><b>Porta/andar</b></label> <input type="text"
+			placeholder="Enter Door/Floor number" name="address2" id="address2">
+			<label for="locality"><b>Localidade</b></label> <input type="text"
+			placeholder="Enter Locality" name="locality" id="locality">
+			<hr>
+			<hr>
+			<input class="updatebutton" type="submit" value="Update" />
+
+			
+			
+		</div>
+
+	
+	</form>
+
+
+</body>
+</html>

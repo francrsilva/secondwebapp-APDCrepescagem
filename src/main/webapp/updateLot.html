@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="content-type"
+	content="application/xhtml+xml; charset=UTF-8" />
+<title>Update Lot</title>
+<script type="text/javascript" src="/app.js"></script>
+
+
+
+<style>
+
+* {
+	box-sizing: border-box;
+}
+
+/* Add padding to containers */
+.container {
+	padding: 16px;
+	background-color: white;
+}
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+	padding: 15px;
+	margin: 5px 0 22px 0;
+	display: inline-block;
+	border: none;
+	background: #f1f1f1;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+	background-color: #ddd;
+	outline: none;
+}
+
+/* Overwrite default styles of hr */
+hr {
+	border: 1px solid #f1f1f1;
+	margin-bottom: 20px
+}
+
+/* Set a style for the submit button */
+.updatebutton {
+	background-color: #3675f4;
+	color: white;
+	padding: 16px 20px;
+	margin: 8px 0;
+	border: none;
+	cursor: pointer;
+	opacity: 0.9;
+	margin-left:10 px;
+}
+
+.updatebutton:hover {
+	opacity: 1;
+}
+
+/* Add a blue text color to links */
+a {
+	color: dodgerblue;
+}
+
+
+.list{
+margin-left:10px;
+}
+</style>
+</head>
+
+<body onload= "upadteLotStart()">
+
+
+	<form>
+		<div class="container">
+			<h1>Update Lot</h1>
+			<nav>
+			<a href="/home.html">Home</a>
+			</nav>
+			<br>
+			<label>Verify lot:</label>
+			
+			<hr>
+			<label for="idLot"><b>idLot:</b></label> <input type="text"
+				placeholder="Enter idLot" name="idLot" id="idLot" required>
+			<br>
+			<label for="registerUsername"><b>register Username:</b></label> <input type="text"
+				placeholder="Enter username of register" name="registerUsername" id="registerUsername" required>
+			<br>
+			<label for="verificado "><b>verificado:</b></label><select class="list"
+				id="role" name="role">
+				<option value=false>Não verificado</option>
+				<option value=true>verificado</option>
+			
+
+			</select>
+			<hr>
+			<input class="updateLotbutton" type="submit" value="UpdateLot" />
+
+		
+			
+		</div>
+
+	
+	</form>
+
+
+</body>
+</html>
