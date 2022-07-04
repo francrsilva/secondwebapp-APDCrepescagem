@@ -47,26 +47,31 @@ input[type=text], input[type=password], input[type=number] {
 
 
 <body >
-	<h2>Search by latitude</h2>
-	
+	<h2>Search by longitude</h2>
 	<nav >
 			<a href="/home.html" class="w3-button w3-bar-item">Home</a> 
 		</nav>
+		
 	
-		<form onload= "listLatLotStart()">		
+		<form onload= "listLongLotStart()">		
 			<div class="container">
-				<label for="upRightLat"><b>upRightLat:</b></label> <input type="number"
-					name= "upRightLat" id="upRightLat" placeholder="Enter upRight latitude" required><br> <label
-					for="downLeftLat"><b>downLeftLat:</b></label> <input type="number" name="downLeftLat"
-					id="downLeftLat" placeholder="Enter downLeft Latitude" required><br>
+				<label for="upRightLong"><b>upRightLong:</b></label> <input type="number"
+					name= "upRightLong" id="upRightLong" placeholder="Enter upRight longitude" required><br> <label
+					for="downLeftLong"><b>downLeftLong:</b></label> <input type="number" name="downLeftLong"
+					id="downLeftLong" placeholder="Enter downLeft longitude" required><br>
 	
-				<input class="button" type="submit" value="Lat" />
 				
 	
 			</div>
 			
+							<input class="button" type="submit" value="Long" />
 			
-		</form>			
+			
+			
+		</form>
+	
+	
+			
 
 
 </body>

@@ -1,9 +1,7 @@
 var xmlhttp = new XMLHttpRequest();
-
 var logInfo;
 const URLx3 = "https://second-project-349311.appspot.com/"
 const URLx4="https://second-project-349311.oa.r.appspot.com/"
-const URLx="https://bamboo-archery-349311.appspot.com/"
 const URLx2 = "http://localhost:8080/"
 
 
@@ -20,6 +18,17 @@ function newPasswordStart() {
 function updateLotStart(){
 	const form = document.querySelector('form');
 	form.addEventListener('submit', processInputUpdateLot);
+}
+
+
+function listLatLotStart(){
+	const form = document.querySelector('form');
+	form.addEventListener('submit', getListLotLat);
+}
+
+function listLongLotStart(){
+	const form = document.querySelector('form');
+	form.addEventListener('submit', getListLotLong);
 }
 
 function updateStart() {
@@ -71,7 +80,9 @@ function removeStart() {
 	}
 
 function getHomeData() {
-		var log = window.localStorage.getItem("Role");
+		var log = window.localStorage.getItem("role");
+
+		var user = window.localStorage.getItem("username");
         var rank;
         if(log==0){
             rank = "USER";
@@ -85,7 +96,7 @@ function getHomeData() {
 
 		var user = window.localStorage.getItem("username");
 
-		document.getElementById("Role").textContent = "Role: " + log;
+		document.getElementById("role").textContent = "Role: " + rank;
 		document.getElementById("welcomeMessage").textContent = "Welcome, " + user;
 		//document.getElementById("logoutStartButton").addEventListener("click",logoutStart())
 
@@ -167,6 +178,10 @@ function processInputUpdate(event) {
 		var u_telmv = verifyNull(new String(value["telmv"]));
 		var u_nif = verifyNull(new String(value["nif"]));
 
+		var u_address1 = verifyNull(new String(value["address1"]));
+		var u_address2 = verifyNull(new String(value["address2"]));
+		var u_locality = verifyNull(new String(value["locality"]));
+
 
 		var obj = JSON.stringify({
 			"username": u_username,
@@ -176,7 +191,10 @@ function processInputUpdate(event) {
 			"perfil": u_perfil,
 			"tel_fixo": u_telfixo,
 			"telmv": u_telmv,
-			"NIF": u_nif
+			"NIF": u_nif,
+			"address1": u_address1,
+			"address2"  :u_address2,
+			"locality" : u_locality
 		});
 
 		xmlhttp.open("POST", URLx3 + "rest/Change/attributes/");
@@ -285,14 +303,16 @@ function processInputUpdateRole(event) {
 
 				}
 			}
+
 			var u_username = window.localStorage.getItem("username");
-			var u_username_To_Remove = new String(value["username"]);
+			var u_usernameToDelete = new String(value["username"]);
 
 
 
-			var obj = JSON.stringify({ "username": u_username, "usernameToDelete": u_username_To_Remove });
+			var obj = JSON.stringify({ "username": u_username,
+			 "usernameToDelete": u_usernameToDelete });
 
-			xmlhttp.open("POST", URLx3 + "rest/Remove/");
+			xmlhttp.open("POST", URLx3 + "rest/delete/user");
 			xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 			xmlhttp.send(obj);
 
@@ -328,7 +348,7 @@ function loginStart() {
 
 			var obj = JSON.stringify({ "username": u_username });
 
-			xmlhttp.open("POST", URLx3 + "rest/logout/");
+			xmlhttp.open("POST", URLx3 + "rest/logout/v1");
 			xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 			xmlhttp.send(obj);
 
@@ -345,7 +365,7 @@ function processInputRegister(event) {
 		if (xmlhttp) {
 			xmlhttp.onreadystatechange = function() {
 				if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-					window.location = URLx3 + "home.html";
+					window.location = URLx3 + "login.html";
 
 				} else if (xmlhttp.readyState === 4 && (xmlhttp.status === 403 || xmlhttp.status === 400)) {
 					alert(xmlhttp.responseText);
@@ -448,7 +468,8 @@ function getList() {
 				console.log(logInfo.role);
 
 				window.location = URLx3 + "home.html";
-				alert(logInfo);
+				alert(logInfo.role);
+				alert(logInfo.tel_fixo);
 
 
 			} else if (xmlhttp.readyState === 4 && xmlhttp.status === 403) {
@@ -456,12 +477,12 @@ function getList() {
 
 
 			}
-		}
+		};
 		var u_username = window.localStorage.getItem("username");
 
 		var obj = JSON.stringify({ "username": u_username });
 
-		xmlhttp.open("POST", URLx3 + "rest/List");
+		xmlhttp.open("POST", URLx3 + "rest/List/v1");
 		xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 		xmlhttp.send(obj);
 
@@ -478,43 +499,44 @@ function getList() {
 
 
 }
- function getListLotLong(){
+ function getListLotLong(event){
+ 	event.preventDefault();
+	const data = new FormData(event.target);
+	const value = Object.fromEntries(data.entries());
+				 alert ("15");
+	
         if (xmlhttp) {
-            xmlhttp.onreadystatechange = function() {
-                if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                    logInfo = JSON.parse(xmlhttp.responseText);
-                    console.log(logInfo.role);
+        			 alert ("25");
+        
+                alert(xmlhttp.readyState);
+			 alert ("35");
 
-                    window.location = URLx3 + "home.html";
-                    alert(logInfo);
-
-
-                } else if (xmlhttp.readyState === 4 && xmlhttp.status === 403) {
-                    alert(xmlhttp.responseText);
-
-
-                }
-            }
-			var token = window.localStorage.getItem('logInfo', logInfo);
+			var u_username = window.localStorage.getItem("username");
 
             var u_upRightLong = new Long(value["upRightLong"]);
             var u_downLeftLong = new Long(value["downLeftLong"]);
 
+			alert(1);
             var obj = JSON.stringify({ 
                 "upRightLong": u_upRightLong,
                  "downLeftLong":u_downLeftLong,
-                 "token" : token
+                 "username" : u_username
                  
             });
-
-            xmlhttp.open("POST", URLx3 + "listLot/long");
+			alert(2);
+            xmlhttp.open("POST", URLx3 + "rest/listLot/long");
+			alert(3);
             xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			alert(4);
             xmlhttp.send(obj);
         }
 
     }
     
-     function getListLotLat(){
+     function getListLotLat(event){
+		event.preventDefault();
+		const data = new FormData(event.target);
+		const value = Object.fromEntries(data.entries());
         if (xmlhttp) {
             xmlhttp.onreadystatechange = function() {
                 if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
@@ -530,21 +552,21 @@ function getList() {
 
 
                 }
-            }
+            };
 
 
-			var token = window.localStorage.getItem('logInfo', logInfo);
+			var u_username = window.localStorage.getItem("username");
             var u_upRightLat = new Long(value["upRightLat"]);
             var u_downLeftLat = new Long(value["downLeftLat"]);
 
             var obj = JSON.stringify({ 
                 "upRightLat": u_upRightLat,
                  "downLeftLat":u_downLeftLat,
-                 "token" : token
+                 "username" : u_username
                  
             });
 
-            xmlhttp.open("POST", URLx3 + "listLot/lat");
+            xmlhttp.open("POST", URLx3 + "rest/listLot/lat");
             xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xmlhttp.send(obj);
         }
@@ -572,7 +594,7 @@ function getList() {
 
             var obj = JSON.stringify({ "username": u_username });
 
-            xmlhttp.open("POST", URLx3 + "rest/List");
+            xmlhttp.open("POST", URLx3 + "rest/List/v1");
             xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xmlhttp.send(obj);
 
@@ -590,7 +612,7 @@ function getList() {
         if (xmlhttp) {
             xmlhttp.onreadystatechange = function() {
                 if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                    window.location = URLx + "home.html";
+                    window.location = URLx3 + "home.html";
 
                 } else if (xmlhttp.readyState === 4 && (xmlhttp.status === 403 || xmlhttp.status === 400)) {
                     alert(xmlhttp.responseText);
@@ -599,32 +621,39 @@ function getList() {
                 }
 
             }
-
+			
             var u_idLot = new String(value["idLot"]);
             var u_rustico = new Boolean(value["rustico"]);
             var u_nameOwner = new String(value["nameOwner"]);
             var u_nacionalidade = new String(value["nacionalidade"]);
             var u_tipoDoc = new String(value["tipoDoc"]);
             var u_dataDoc = new String(value["dataDoc"]);
-            var u_upRightLat = new Long(value["upRightLat"]);
-            var u_upRightLong = new Long(value["upRightLong"]);
-            var u_downLeftLat = new Long(value["downLeftLat"]);
-            var u_downLeftLat = new Long(value["downLeftLong"]);
+
+			var u_nif = new String(value["NIF"]);
+			
+            var u_upRightLat = new String(value["upRightLat"]);
+            var u_upRightLong = new String(value["upRightLong"]);
+            var u_downLeftLat = new String(value["downLeftLat"]);
+            var u_downLeftLong = new String(value["downLeftLong"]);
             
+			var u_username = window.localStorage.getItem("username");
+
             var obj = JSON.stringify({
                 "idLot" : u_idLot,
                 "rustico" : u_rustico,
-            "nameOwner" : u_nameOwner,
+           		"nameOwner" : u_nameOwner,
                 "nacionalidade" : u_nacionalidade,
                 "tipoDoc" : u_tipoDoc ,
                 "dataDoc" : u_dataDoc,
                 "upRightLat" :  u_upRightLat,
                 "upRightLong" : u_upRightLong,
                 "downLeftLat" : u_downLeftLat,
-                "downLeftLat" : u_downLeftLat
-            });
+                "downLeftLong" : u_downLeftLong,
+				"NIF" : u_nif,
+				"username" : u_username
+			});
 
-            xmlhttp.open("POST", URLx + "rest/registerLot/v1");
+            xmlhttp.open("POST", URLx3 + "rest/registerLot/v1");
             xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xmlhttp.send(obj);
         }   
@@ -639,7 +668,7 @@ function getList() {
         if (xmlhttp) {
             xmlhttp.onreadystatechange = function() {
                 if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                    window.location = URLx + "home.html";
+                    window.location = URLx3 + "home.html";
                     alert(xmlhttp.responseText);
 
 
@@ -650,18 +679,18 @@ function getList() {
                 }
             }
 
+			var u_username = window.localStorage.getItem("username");
             var u_idLot = new String(value["idLot"]);
-            var u_registerUsername = new String(value["registerUsername"]);
             var u_verificado = new Boolean(value["verificado"]);
 
             var obj = JSON.stringify({
+				"username" : u_username,
                 "idLot": u_idLot,
-                "registerUsername": u_registerUsername,
                 "verificado": u_verificado,
                 
             });
 
-            xmlhttp.open("POST", URLx + "rest/Update/lot/");
+            xmlhttp.open("POST", URLx3 + "rest/Change/lot/");
             xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xmlhttp.send(obj);
 

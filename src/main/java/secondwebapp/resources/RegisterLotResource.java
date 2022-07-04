@@ -39,21 +39,21 @@ public class RegisterLotResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response doRegisterLotResource(LotData data) {
-		LOG.fine("Register lot attempt by user: " + data.token.username);
+		LOG.fine("Register lot attempt by user: " + data.username);
 
 		Transaction txn = datastore.newTransaction();
 		try{
 			//user que ta a meker
-		Key userKey = datastore.newKeyFactory().setKind("User").newKey(data.token.username);
+		Key userKey = datastore.newKeyFactory().setKind("User").newKey(data.username);
 		Entity user = txn.get(userKey);
 			
 			//token de quem ta login a mexer
-		Key TokenKey = datastore.newKeyFactory().addAncestor(PathElement.of("User", data.token.username)).setKind("Token")
-				.newKey(data.token.username);
+		Key TokenKey = datastore.newKeyFactory().addAncestor(PathElement.of("User", data.username)).setKind("Token")
+				.newKey(data.username);
 		Entity userlog = txn.get(TokenKey);
 		
 		//ver quanto a isto
-		Key lotKey = datastore.newKeyFactory().addAncestor(PathElement.of("User", data.token.username)).setKind("Lot")
+		Key lotKey = datastore.newKeyFactory().addAncestor(PathElement.of("User", data.username)).setKind("Lot")
 				.newKey(data.idLot);
 		
 		Entity lot = txn.get(lotKey);
@@ -70,7 +70,7 @@ public class RegisterLotResource {
 								.set("tipoDoc", data.tipoDoc)
 								.set("dataDoc", data.dataDoc)
 								.set("NIF", data.NIF)
-								.set("verificado", false)
+								.set("verificado", false)			//na verdade e sempre inicializado a false 
 								.set("upRightLat", data.upRightLat)
 								.set("upRightLong", data.upRightLong)
 								.set("downLeftLat", data.downLeftLat)
@@ -104,7 +104,7 @@ public class RegisterLotResource {
 					}
 				} else {
 					txn.rollback();
-					LOG.warning("User: " + data.token.username + " not logged");
+					LOG.warning("User: " + data.username + " not logged");
 					return Response.status(Status.BAD_REQUEST).entity("User not logged").build();
 				}
 		

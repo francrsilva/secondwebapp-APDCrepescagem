@@ -20,6 +20,7 @@ import com.google.cloud.datastore.Transaction;
 import com.google.gson.Gson;
 
 import secondwebapp.util.AuthToken;
+import secondwebapp.util.RemoveData;
 
 @Path("/delete")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -32,10 +33,11 @@ private final Datastore datastore = DatastoreOptions.getDefaultInstance().getSer
 	private final Gson g = new Gson();
 	
 	@POST
-	@Path("/{userId}")
+	@Path("/user")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response deleteUser(@PathParam("userId") String userId, AuthToken token) {
-		String username = token.username;
+	public Response deleteUser(RemoveData data) {
+		
+		String username = data.username;
 		
 		if(username == null || username.isEmpty()) {
 			return Response.status(Status.BAD_REQUEST).entity("Invalid username").build();
@@ -43,16 +45,16 @@ private final Datastore datastore = DatastoreOptions.getDefaultInstance().getSer
 		
 		Key userKey = datastore.newKeyFactory()
 				.setKind("User")
-				.newKey(token.username);
+				.newKey(data.username);
 		
 		Key tokenKey = datastore.newKeyFactory()
-				.addAncestor(PathElement.of("User", token.username))
+				.addAncestor(PathElement.of("User", data.username))
 				.setKind("Token")
-				.newKey(token.username);
+				.newKey(data.username);
 		
 		Key deleteKey = datastore.newKeyFactory()
 				.setKind("User")
-				.newKey(userId);
+				.newKey(data.usernameToDelete);
 		
 		Transaction txn = datastore.newTransaction();
 		
@@ -67,7 +69,7 @@ private final Datastore datastore = DatastoreOptions.getDefaultInstance().getSer
 			
 			if(tokenEntity == null) {
 				return Response.status(Status.NOT_FOUND).entity("Token doesn't exist").build();
-			}else if(tokenEntity.getLong("expirationDate") < System.currentTimeMillis()) {
+			}else if(tokenEntity.getLong("expiration_time") < System.currentTimeMillis()) {
 				return Response.status(Status.FORBIDDEN).entity("Token expired").build();
 			}
 			
@@ -80,7 +82,7 @@ private final Datastore datastore = DatastoreOptions.getDefaultInstance().getSer
 			}
 			
 			datastore.delete(deleteKey);
-			
+			LOG.info("User " + data.usernameToDelete + " logged in sucessfully.");
 			return Response.ok().build();
 			
 		}catch(Exception e) {

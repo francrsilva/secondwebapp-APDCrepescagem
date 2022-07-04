@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 //import secondwebapp.resources.UserResource;
 import secondwebapp.util.AuthToken;
 import secondwebapp.util.DisplayUser;
+import secondwebapp.util.LogoutData;
 import secondwebapp.util.UserInfo;
 
 @Path("/List")
@@ -48,9 +49,9 @@ public class ListResource {
 	@POST
 	@Path("/v1")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response listUsers(AuthToken token) {
-		LOG.fine("Attempt list users by user: " + token.username);
-		String username = token.username;
+	public Response listUsers(LogoutData data) {
+		LOG.fine("Attempt list users by user: " + data.username);
+		String username = data.username;
 		
 		if(username == null || username.isEmpty()) {
 			return Response.status(Status.BAD_REQUEST).entity("Invalid username").build();
@@ -58,15 +59,15 @@ public class ListResource {
 		
 		Key userKey = datastore.newKeyFactory()
 				.setKind("User")
-				.newKey(token.username);
+				.newKey(data.username);
 		
 		//nao tenho a certeza se aqui e setKind "Token" ou "AuthToken"
 		//tambem nao sei se e token.username ou token.tokenID
 		//talvez ate criar uma classe de data
 		Key tokenKey = datastore.newKeyFactory()
-				.addAncestor(PathElement.of("User", token.username))
+				.addAncestor(PathElement.of("User", data.username))
 				.setKind("Token")
-				.newKey(token.username);
+				.newKey(data.username);
 		
 		/*
 		 * Key TokenKey = datastore.newKeyFactory().addAncestor(PathElement.of("User", data.username)).setKind("Token")
@@ -88,65 +89,50 @@ public class ListResource {
 			
 			if(tokenEntity == null) {
 				return Response.status(Status.NOT_FOUND).entity("Token doesn't exist").build();
-			}else if(tokenEntity.getLong("expirationDate") < System.currentTimeMillis()) {
+			}else if(tokenEntity.getLong("expiration_time") < System.currentTimeMillis()) {
 				return Response.status(Status.FORBIDDEN).entity("Token expired").build();
 			}
 			
 			if(user.getLong("Role") == 0L) {
 				// USER
-								
-				ProjectionEntityQuery query = Query.newProjectionEntityQueryBuilder()
-				        .setKind("User")
-				        .setFilter(
-				        		CompositeFilter.and(
-				        				PropertyFilter.eq("Role", 0L),
-				        				PropertyFilter.eq("Status", ATIVO),
-				        				PropertyFilter.eq("perfil", PUBLICO)
-				        		))
-				        .setProjection("email", "name")
-				        .build();
 				
-				//TODO use cursor
+			
+				Query<Entity> query = Query.newEntityQueryBuilder().setKind("User")
+						.setFilter(CompositeFilter.and(PropertyFilter.eq("Role", 0L),
+								PropertyFilter.eq("Status", ATIVO), PropertyFilter.eq("perfil", PUBLICO)))
+						.build();
+
+				QueryResults<Entity> usersR = datastore.run(query);
+
+				List<String> listUsers = new ArrayList();
 				
-				QueryResults<ProjectionEntity> result = datastore.run(query);
-				List<DisplayUser> users = new ArrayList<>();
-				
-				result.forEachRemaining(displayUser -> {
-					users.add(new DisplayUser(displayUser.getKey().getName(), displayUser.getString("email"), displayUser.getString("name")));
+				usersR.forEachRemaining(users -> {
+					listUsers.add(users.getKey().getName() + " " + users.getKey().getName() + " "
+							+ users.getString("email") + " ");
 				});
+				return Response.ok(g.toJson(listUsers)).build();
 				
-				return Response.ok(g.toJson(users)).build();
+				
 			}else {
-				EntityQuery.Builder builder = Query.newEntityQueryBuilder()
-						.setKind("User");
-						
+				Query<Entity> query;
 				if(user.getLong("Role") < 30L){	
-					// Not superuser
-					builder.setFilter(PropertyFilter.lt("Role", user.getLong("Role")));
+					 query = Query.newEntityQueryBuilder().setKind("User")
+							.setFilter(PropertyFilter.lt("Role", user.getLong("Role"))).build();
+				}else {
+					query = Query.newEntityQueryBuilder().setKind("User")
+							.build();
 				}
-				
-				EntityQuery query = builder.build();
-				
-				QueryResults<Entity> result = datastore.run(query);
-				List<UserInfo> users = new ArrayList<>();
-				result.forEachRemaining(userInfo -> {
-					users.add(new UserInfo(
-							userInfo.getKey().getName(), 
-							userInfo.getString("email"),
-							userInfo.getString("name"),
-							userInfo.getString("perfil"),
-							userInfo.getString("tel_fixo"),
-							userInfo.getString("telmv"), 
-							userInfo.getString("address1"),
-							userInfo.getString("address2"),
-							userInfo.getString("locality"),
-							userInfo.getString("NIF"),
-							userInfo.getString("Status"),
-							userInfo.getLong("Role")
-							));
+				QueryResults<Entity> usersR = datastore.run(query);
+
+				List<String> listUsers = new ArrayList();
+				usersR.forEachRemaining(users -> {
+					listUsers.add(users.getLong("Role") + " " + users.getKey().getName() + " "
+							+ users.getString("name") + " " + users.getString("email") + " " + users.getString("perfil")
+							+ " " + users.getString("tel_fixo") + " " + users.getString("telmv") + " "
+							+ users.getString("NIF") + " " + users.getString("Status") + "\n ");
 				});
+				return Response.ok(g.toJson(listUsers)).build();
 				
-				return Response.ok(g.toJson(users)).build();
 			}
 
 			

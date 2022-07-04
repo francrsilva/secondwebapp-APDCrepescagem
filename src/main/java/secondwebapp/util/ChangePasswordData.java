@@ -46,7 +46,7 @@ public class ChangePasswordData {
 		}
 		public boolean validValue(String value) {
 			// TODO Auto-generated method stub
-			if (value!=null && !value.isBlank())
+			if (value!=null && !value.isEmpty())
 					return true;
 			return false;
 		}
@@ -64,12 +64,12 @@ public class ChangePasswordData {
 			return result;
 		}
 	
-		/*
+		
 		public boolean validRegistration2() {
 			// TODO Auto-generated method stub
 					return true;
 		}
-		*/
+		
 
 }
 

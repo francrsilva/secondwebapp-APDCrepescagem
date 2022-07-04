@@ -46,16 +46,16 @@ public class ListLotResource {
 	@Path("/lat")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response listLotsLat(ListLotLatData data) {
-		LOG.fine("List Lat Lots attempt by user: " + data.token.username);
+		LOG.fine("List Lat Lots attempt by user: " + data.username);
 				
 		Key userKey = datastore.newKeyFactory()
 				.setKind("User")
-				.newKey(data.token.username);
+				.newKey(data.username);
 		
 		Key tokenKey = datastore.newKeyFactory()
-				.addAncestor(PathElement.of("User", data.token.username))
+				.addAncestor(PathElement.of("User", data.username))
 				.setKind("Token")
-				.newKey(data.token.username);
+				.newKey(data.username);
 		
 		Transaction txn = datastore.newTransaction();
 		try {
@@ -70,38 +70,29 @@ public class ListLotResource {
 			
 			if(tokenEntity == null) {
 				return Response.status(Status.NOT_FOUND).entity("AuthToken doesn't exist").build();
-			}else if(tokenEntity.getLong("expirationDate") < System.currentTimeMillis()) {
+			}else if(tokenEntity.getLong("expiration_time") < System.currentTimeMillis()) {
 				return Response.status(Status.FORBIDDEN).entity("AuthToken expired").build();
 			}
 			
 				
-			EntityQuery.Builder builder = Query.newEntityQueryBuilder()
-					.setKind("Lot");
+			//
+			Query<Entity> query = Query.newEntityQueryBuilder().setKind("Lot")
+					.setFilter(CompositeFilter.and(PropertyFilter.le("upRightLat", data.upRightLat),
+		    				PropertyFilter.ge("downLeftLat", data.downLeftLat)))
+					.build();
+
+			QueryResults<Entity> lotsR = datastore.run(query);
+
+			List<String> listLots = new ArrayList();
 			
-			builder.setFilter(CompositeFilter.and(
-    				PropertyFilter.le("upRightLat", data.upRightLat),
-    				PropertyFilter.ge("downLeftLat", data.downLeftLat)));
-			
-			EntityQuery query = builder.build();
-			QueryResults<Entity> result = datastore.run(query);
-			List<LotDataObj> lots = new ArrayList<>();
-			result.forEachRemaining(lotdata -> {
-				lots.add(new LotDataObj(
-						lotdata.getKey().getName(), 
-						lotdata.getBoolean("rustico"),
-						lotdata.getString("nameOwner"),
-						lotdata.getString("nacionalidade"),
-						lotdata.getString("tipoDoc"),
-						lotdata.getString("dataDoc"),
-						lotdata.getString("NIF"),
-						lotdata.getBoolean("verificado"),
-						lotdata.getLong("upRightLat"),
-						lotdata.getLong("upRightLong"),
-						lotdata.getLong("downLeftLat"),
-						lotdata.getLong("downLeftLong")));
+			lotsR.forEachRemaining(lots -> {
+				listLots.add(lots.getKey().getName() + " " + lots.getBoolean("rustico") + " "
+						+ lots.getString("nameOwner") + " "+ lots.getString("nacionalidade")+" "+lots.getString("tipoDoc")
+						+" "+lots.getString("dataDoc")+" "+lots.getString("NIF")+" "+lots.getBoolean("verificado")+" "
+						+" "+lots.getDouble("upRightLat")+" "+lots.getDouble("upRightLong")+" "+lots.getDouble("downLeftLat")
+						+" "+lots.getDouble("downLeftLong")+ "/n");
 			});
-				
-			return Response.ok(g.toJson(lots)).build();
+			return Response.ok(g.toJson(listLots)).build();
 			
 			//EntityQuery.Builder query = Query.newEntityQueryBuilder()
 		/*		ProjectionEntityQuery query = Query.newProjectionEntityQueryBuilder()
@@ -136,16 +127,16 @@ public class ListLotResource {
 	@Path("/long")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response listLotsLong(ListLotLongData data) {
-		LOG.fine("List Lat Lots attempt by user: " + data.token.username);
+		LOG.fine("List Lat Lots attempt by user: " + data.username);
 		
 		Key userKey = datastore.newKeyFactory()
 				.setKind("User")
-				.newKey(data.token.username);
+				.newKey(data.username);
 		
 		Key tokenKey = datastore.newKeyFactory()
-				.addAncestor(PathElement.of("User", data.token.username))
+				.addAncestor(PathElement.of("User", data.username))
 				.setKind("Token")
-				.newKey(data.token.username);
+				.newKey(data.username);
 		
 		Transaction txn = datastore.newTransaction();
 		try {
@@ -160,39 +151,31 @@ public class ListLotResource {
 			
 			if(tokenEntity == null) {
 				return Response.status(Status.NOT_FOUND).entity("AuthToken doesn't exist").build();
-			}else if(tokenEntity.getLong("expirationDate") < System.currentTimeMillis()) {
+			}else if(tokenEntity.getLong("expiration_time") < System.currentTimeMillis()) {
 				return Response.status(Status.FORBIDDEN).entity("AuthToken expired").build();
 			}
 			
-				
-			EntityQuery.Builder builder = Query.newEntityQueryBuilder()
-					.setKind("Lot");
 			
-			builder.setFilter(CompositeFilter.and(
-    				PropertyFilter.le("upRightLong", data.upRightLong),
-    				PropertyFilter.ge("downLeftLong", data.downLeftLong)));
+			//
+			Query<Entity> query = Query.newEntityQueryBuilder().setKind("Lot")
+					.setFilter(CompositeFilter.and(PropertyFilter.le("upRightLong", data.upRightLong),
+		    				PropertyFilter.ge("downLeftLong", data.downLeftLong)))
+					.build();
+
+			QueryResults<Entity> lotsR = datastore.run(query);
+
+			List<String> listLots = new ArrayList();
 			
-			EntityQuery query = builder.build();
-			QueryResults<Entity> result = datastore.run(query);
-			List<LotDataObj> lots = new ArrayList<>();
-			result.forEachRemaining(lotdata -> {
-				lots.add(new LotDataObj(
-						lotdata.getKey().getName(), 
-						lotdata.getBoolean("rustico"),
-						lotdata.getString("nameOwner"),
-						lotdata.getString("nacionalidade"),
-						lotdata.getString("tipoDoc"),
-						lotdata.getString("dataDoc"),
-						lotdata.getString("NIF"),
-						lotdata.getBoolean("verificado"),
-						lotdata.getLong("upRightLat"),
-						lotdata.getLong("upRightLong"),
-						lotdata.getLong("downLeftLat"),
-						lotdata.getLong("downLeftLong")));
+			lotsR.forEachRemaining(lots -> {
+				listLots.add(lots.getKey().getName() + " " + lots.getBoolean("rustico") + " "
+						+ lots.getString("nameOwner") + " "+ lots.getString("nacionalidade")+" "+lots.getString("tipoDoc")
+						+" "+lots.getString("dataDoc")+" "+lots.getString("NIF")+" "+lots.getBoolean("verificado")+" "
+						+" "+lots.getDouble("upRightLat")+" "+lots.getDouble("upRightLong")+" "+lots.getDouble("downLeftLat")
+						+" "+lots.getDouble("downLeftLong")+ "/n");
 			});
-				
-			return Response.ok(g.toJson(lots)).build();
-			
+			return Response.ok(g.toJson(listLots)).build();
+			//
+		
 			//EntityQuery.Builder query = Query.newEntityQueryBuilder()
 		/*		ProjectionEntityQuery query = Query.newProjectionEntityQueryBuilder()
 				        .setKind("Lot")

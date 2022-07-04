@@ -18,6 +18,7 @@ import com.google.cloud.datastore.PathElement;
 import com.google.cloud.datastore.Transaction;
 
 import secondwebapp.util.AuthToken;
+import secondwebapp.util.RemoveData;
 
 @Path("/logout")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -30,10 +31,10 @@ private static final Logger LOG = Logger.getLogger(LogoutResource.class.getName(
 	public LogoutResource() { }
 	
 	@POST
-	@Path("/")
+	@Path("/v1")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response logout(AuthToken token) {
-		String username = token.username;
+	public Response logout(RemoveData data) {
+		String username = data.username;
 		
 		if(username == null || username.isEmpty()) {
 			return Response.status(Status.BAD_REQUEST).entity("Invalid username").build();
@@ -41,12 +42,12 @@ private static final Logger LOG = Logger.getLogger(LogoutResource.class.getName(
 		
 		Key userKey = datastore.newKeyFactory()
 				.setKind("User")
-				.newKey(token.username);
+				.newKey(data.username);
 		
 		Key tokenKey = datastore.newKeyFactory()
-				.addAncestor(PathElement.of("User", token.username))
+				.addAncestor(PathElement.of("User", data.username))
 				.setKind("Token")
-				.newKey(token.username);
+				.newKey(data.username);
 		
 		Transaction txn = datastore.newTransaction();
 		
@@ -62,7 +63,7 @@ private static final Logger LOG = Logger.getLogger(LogoutResource.class.getName(
 			
 			if(tokenEntity == null) {
 				return Response.status(Status.NOT_FOUND).entity("Token doesn't exist").build();
-			}else if(tokenEntity.getLong("expirationDate") < System.currentTimeMillis()) {
+			}else if(tokenEntity.getLong("expiration_time") < System.currentTimeMillis()) {
 				return Response.status(Status.FORBIDDEN).entity("User already logged out (Token expired)").build();
 			}
 			

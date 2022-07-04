@@ -4,17 +4,17 @@ public class ListLotLatData {
 
 	public long upRightLat;
 	public long downLeftLat;
-	public AuthToken token;
+	public String username;
 	
 
 	public ListLotLatData() {
 		
 	}
 
-	public ListLotLatData(long upRightLat, long downLeftLat, AuthToken token) {
+	public ListLotLatData(long upRightLat, long downLeftLat, String username) {
 		this.upRightLat = upRightLat;
 		this.downLeftLat = downLeftLat;
-		this.token = token;
+		this.username = username;
 	}
 	
 /*

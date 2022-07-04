@@ -421,6 +421,17 @@ public class UpdateResource {
 							(data.username.equals(data.usernameToChange) && user.getLong("Role") == 20L) ) {
 					
 						userToChange=Entity.newBuilder(userKey2)
+								.set("user_pwd", user_pwd)
+								.set("email", email)
+								.set("name", name)
+								.set("perfil",perfil)
+								.set("tel_fixo",tel_fixo)
+								.set("telmv", telmv)
+								.set("NIF", NIF)
+								.set("address1", address1)
+								.set("address2", address2)
+								.set("locality", locality)
+								.set("Role", Role)
 								.set("Status",data.status.equals("ATIVO") || data.status.equals("INATIVO") ? data.status :status)
 								.build();
 				
@@ -429,12 +440,34 @@ public class UpdateResource {
 							(data.username.equals(data.usernameToChange) && user.getLong("Role") == 10L) ) {
 					
 						userToChange=Entity.newBuilder(userKey2)
+								.set("user_pwd", user_pwd)
+								.set("email", email)
+								.set("name", name)
+								.set("perfil",perfil)
+								.set("tel_fixo",tel_fixo)
+								.set("telmv", telmv)
+								.set("NIF", NIF)
+								.set("address1", address1)
+								.set("address2", address2)
+								.set("locality", locality)
+								.set("Role", Role)
 								.set("Status", data.status.equals("ATIVO") || data.status.equals("INATIVO") ? data.status :status)
 								.build();
 				
 					
 					}else if(data.username.equals(data.usernameToChange) && user.getLong("Role") == 0L) {
 						userToChange=Entity.newBuilder(userKey2)
+								.set("user_pwd", user_pwd)
+								.set("email", email)
+								.set("name", name)
+								.set("perfil",perfil)
+								.set("tel_fixo",tel_fixo)
+								.set("telmv", telmv)
+								.set("NIF", NIF)
+								.set("address1", address1)
+								.set("address2", address2)
+								.set("locality", locality)
+								.set("Role", Role)
 								.set("Status", data.status.equals("ATIVO") || data.status.equals("INATIVO") ? data.status :status)
 								.build();
 						
@@ -484,10 +517,6 @@ public class UpdateResource {
 			Entity user = txn.get(userKey1);
 			
 			
-			//nao usado. pensar em tira lo daqui e das classes lotData e updateLotData
-			Key userKey2 = datastore.newKeyFactory().setKind("User").newKey(data.registerUsername);
-			Entity userRegisterLot = txn.get(userKey2);
-			
 			
 			Key lotKey = datastore.newKeyFactory().setKind("Lot").newKey(data.idLot);
 			Entity lot = txn.get(lotKey);
@@ -495,19 +524,20 @@ public class UpdateResource {
 			if (userlog != null && userlog.getLong("expiration_time") > System.currentTimeMillis()) {
 				if(user.getLong("Role") >= 10L) {
 					
-					String idLot = lot.getString("idLot");
 					boolean rustico = lot.getBoolean("rustico");
 					String nameOwner = lot.getString("nameOwner");
 					String nacionalidade = lot.getString("nacionalidade");
 					String tipoDoc = lot.getString("tipoDoc");
 					String dataDoc = lot.getString("dataDoc");
 					String NIF = lot.getString("NIF");
-					boolean verificado = lot.getBoolean("verificado");
-					long upRight = lot.getLong("upRight");
-					long downLeft = lot.getLong("downLeft");
+					Double upRightLat = lot.getDouble("upRightLat");
+					Double upRightLong = lot.getDouble("upRight");
+
+					Double downLeftLat = lot.getDouble("downLeftLat");
+					Double downLeftLong = lot.getDouble("downLeftLong");
+					String username = lot.getString("username");
 					
 					lot = Entity.newBuilder(lotKey)
-							.set("idLot",idLot)
 							.set("rustico", rustico)
 							.set("nameOwner", nameOwner)
 							.set("nacionalidade", nacionalidade)
@@ -515,9 +545,15 @@ public class UpdateResource {
 							.set("dataDoc", dataDoc)
 							.set("NIF", NIF)
 							.set("verificado", data.verificado)
-							.set("upRight", upRight)
-							.set("downLeft", downLeft)
+							.set("upRightLat", upRightLat)
+							.set("downLeftLat", downLeftLat)
+							.set("upRightLong", upRightLong)
+							.set("downLeftLong", downLeftLong)
+							.set("username", username)
 							.build();
+					
+					txn.put(lot);
+					txn.commit();
 					
 				}else {
 					txn.rollback();
@@ -533,8 +569,7 @@ public class UpdateResource {
 
 			}
 			
-			txn.put(lot);
-			txn.commit();
+			
 			LOG.info("Lot status changed sucessfully.");
 			return Response.ok("Lot status changed").build();
 		
